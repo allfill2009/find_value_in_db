@@ -1,11 +1,12 @@
 SET @i := 0;
 SET @d := '2020-04-09 00:00:00';
-SET @database_name := '^benefits_develop$';
+SET @database_name := '^develop$';
 SELECT CONCAT(IF ((@i := @i + 1) = 1, '', 'UNION '), 
-              'SELECT ''SELECT * FROM `', t.TABLE_NAME, '`',
-              '  WHERE `', t.COLUMN_NAME, '` >= "', @d, '"; '' as "#table_name"',
-              '  FROM `', t.TABLE_NAME, '`',
-              '  WHERE `', t.COLUMN_NAME, '` >= "', @d, '"') AS '#table_name;' 
+              'SELECT ',
+              '  ''SELECT * FROM `', t.TABLE_NAME, '`',
+              '    WHERE `', t.COLUMN_NAME, '` >= "', @d, '"; '' as "#table_name"',
+              'FROM `', t.TABLE_NAME, '`',
+              'WHERE `', t.COLUMN_NAME, '` >= "', @d, '"') AS '#table_name;' 
 FROM (
   SELECT c.TABLE_NAME, MAX(c.COLUMN_NAME) as COLUMN_NAME
   FROM information_schema.`COLUMNS` c
